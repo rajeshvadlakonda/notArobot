@@ -4,6 +4,7 @@ var currentImage;
 let data;
 let shuffledData;
 start();
+
 function start(){
     let el = document.getElementById("img-grid");
     data = [
@@ -33,48 +34,52 @@ function start(){
         count = 0;
         el.innerHTML = output   ;
         clickImages();
+}
+function reset(){
+    start();
+    document.getElementById('para').innerHTML = "";
+    document.getElementById('reset').style.display= "none";
+    document.getElementById('verify').style.display = "none";
+}
+
+function verify(){
+    console.log(currentName);
+    console.log(selectedImageName);
+    if (currentName === selectedImageName){
+        document.getElementById("para").innerHTML= "You are human"
     }
-    function reset(){
-        start();
-        document.getElementById('para').innerHTML = "";
-        document.getElementById('reset').style.display= none;
-        document.getElementById('verify').style.display = none;
+    else {
+        document.getElementById("para").innerHTML="recognition failed"
     }
-    function verify(){
-        if (currentName === selectedImageName){
-            document.getElementById("para").innerHTML= "You are human"
-        }
-        else {
-            document.getElementById("para").innerHTML="failed recognition"
-        }
-        document.getElementById('verify').style.display="none";
-    }
-    function clickImages(){
-        document.querySelectorAll('.image').forEach(element => {
-            element.addEventListener('click',event => {
-                console.log(element.getAttribute('data-ns-test'));
-                count++;
-                if (count > 0){
-                    document.getElementById('reset').style.display="inline";
-                    if (count ==2){
-                        document.getElementById('verify').style.display="inline";
-                    }else if (count > 2){
-                        document.getElementById('verify').style.display="none";
-                        document.getElementById('para').innerHTML="verification failed";
-                        return;
-                    }
-                }
-                currentName = item.getAttribute("data-ns-test");
-                if (count ==1){
-                    item.setAttribute('img-clicked','true');
-                    selectedImageName = currentName;
-                } else if (item.getAttribute('img-clicked')=='true'){
-                    selectedImageName = "";
+    document.getElementById('verify').style.display="none";
+}
+
+function clickImages(){
+    document.querySelectorAll('.image').forEach(element => {
+        element.addEventListener('click',event => {
+            console.log(element.getAttribute('data-ns-test'));
+            count++;
+            if (count > 0){
+                document.getElementById('reset').style.display="inline";
+                if (count ==2){
+                    document.getElementById('verify').style.display="inline";
+                }else if (count > 2){
                     document.getElementById('verify').style.display="none";
-                    count--;
+                    document.getElementById('para').innerHTML="verification failed";
+                    return;
                 }
-            })
+            }
+            currentName = element.getAttribute("data-ns-test");
+            if (count ==1){
+                element.setAttribute('img-clicked','true');
+                selectedImageName = currentName;
+            } else if (element.getAttribute('img-clicked')=='true'){
+                selectedImageName = "";
+                document.getElementById('verify').style.display="none";
+                count--;
+            }
         })
-    }
+    })
+}
 
 
